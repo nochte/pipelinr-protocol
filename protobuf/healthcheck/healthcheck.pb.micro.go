@@ -6,7 +6,7 @@ package healthcheck
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	pipes "github.com/nochte/pipelinr/protobuf/pipes"
+	pipes "github.com/nochte/pipelinr-protocol/protobuf/pipes"
 	math "math"
 )
 

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package accounts;
-option go_package = "github.com/nochte/pipelinr/protobuf/accounts";
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/accounts";
 import "pmongo/objectid.proto";
 import "gogo.proto";
 import "google/protobuf/timestamp.proto";

@@ -6,7 +6,7 @@ package healthcheck
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/nochte/pipelinr/protobuf/pipes"
+	_ "github.com/nochte/pipelinr-protocol/protobuf/pipes"
 	math "math"
 )
 

@@ -9,7 +9,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	timestamp "github.com/golang/protobuf/ptypes/timestamp"
-	_ "github.com/nochte/pipelinr/protobuf/pipes"
+	_ "github.com/nochte/pipelinr-protocol/protobuf/pipes"
 	math "math"
 )
 

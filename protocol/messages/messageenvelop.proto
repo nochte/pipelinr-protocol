@@ -3,7 +3,7 @@ syntax = "proto3";
 package messages;
 import "gogo.proto";
 
-option go_package = "github.com/nochte/pipelinr/protobuf/messages";
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/messages";
 
 message RouteLog {
     option (gogoproto.goproto_unrecognized) = false;

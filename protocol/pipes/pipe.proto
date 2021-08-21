@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package pipes;
-option go_package = "github.com/nochte/pipelinr/protobuf/pipes";
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/pipes";
 // import "google/protobuf/wrappers.proto";
 // import "google/protobuf/struct.proto";
 import "messageenvelop.proto";

@@ -6,7 +6,7 @@ import "gogo.proto";
 import "google/protobuf/timestamp.proto";
 
 package messages;
-option go_package = "github.com/nochte/pipelinr/protobuf/messages";
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/messages";
 
 enum EventType {
     All = 0;

@@ -6,7 +6,7 @@ package pipes
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	messages "github.com/nochte/pipelinr/protobuf/messages"
+	messages "github.com/nochte/pipelinr-protocol/protobuf/messages"
 	math "math"
 )
 
