@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "messageenvelop.proto";
+import "pmongo/objectid.proto";
+import "gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+package messages;
+option go_package = "github.com/nochte/pipelinr/protobuf/messages";
+
+enum EventType {
+    All = 0;
+    Created = 1;
+    PipelineElementCompleted = 2;
+    PipelineCompleted = 3;
+    PipelineElementFailed = 4;
+    PipelineFailed = 5;
+}
+
+message Event {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+
+    pmongo.ObjectId id = 1 [(gogoproto.moretags) = "bson:\"_id,omitempty\"" ];
+    MessageEnvelop Message = 2;
+    EventType Type = 3;
+    string Meta = 4;
+    google.protobuf.Timestamp CreatedAt = 5;
+    google.protobuf.Timestamp UpdatedAt = 6;
+    string Context = 7;
+}
+
+message Events {
+    repeated Event Events = 1;
+}

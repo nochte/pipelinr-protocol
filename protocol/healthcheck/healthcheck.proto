@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package healthcheck;
+option go_package = "github.com/nochte/pipelinr/protobuf/healthcheck";
+
+import "pipe.proto";
+
+service Healthcheck {
+    rpc IsReady(pipes.Null) returns (pipes.GenericResponse) {}
+    rpc IsHealthy(pipes.Null) returns (pipes.GenericResponse) {}
+}

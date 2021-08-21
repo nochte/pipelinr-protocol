@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package pipes;
+option go_package = "github.com/nochte/pipelinr/protobuf/pipes";
+// import "google/protobuf/wrappers.proto";
+// import "google/protobuf/struct.proto";
+import "messageenvelop.proto";
+import "event.proto";
+
+message GenericResponse {
+    string Message = 1;
+    bool OK = 2;
+    string _id = 3;
+}
+
+message GenericResponses {
+    repeated GenericResponse GenericResponses = 1;
+}
+
+message Null {}
+message ReceiveOptions {
+    bool AutoAck = 1;
+    bool Block = 2;
+    int32 Count = 3;
+    int64 Timeout = 4;
+    string Pipe = 5;
+    int64 RedeliveryTimeout = 6;
+}
+message Xid {
+    string _id = 1;
+}
+message CompleteRequest {
+    string _id = 1;
+    string step = 2;
+}
+
+message RouteLogRequest {
+    string _id = 1;
+    messages.RouteLog Log = 2;
+}
+
+message AddStepsRequest {
+    string _id = 1;
+    string After = 2;
+    repeated string NewSteps = 3;
+}
+
+message Decoration {
+    string _id = 1;
+    string Key = 2;
+    // google.protobuf.Value Value = 3;
+    string Value = 4;
+    // oneof Value {
+    //     int64 Int = 3;
+    //     double Float = 4;
+    //     string String = 5;
+    //     bool Bool = 6;
+    // }
+}
+
+message Decorations {
+    string _id = 1;
+    repeated Decoration Decorations = 2;
+}
+
+service Pipe {
+    // Send will send up a message envelop, and will return an event id, error if invalid for any reason
+    rpc Send(messages.MessageEnvelop) returns (Xid) {}
+    // Recv will request to receive with options. Defaults to {
+    //     AutoAck = false,
+    //     Block = true,
+    //     Count = 1,
+    //     Timeout = inf
+    // }
+    rpc Recv(ReceiveOptions) returns (messages.Events) {}
+    // Ack acknowledges that a message by id was received and can be discarded from the re-enqueue queue queue
+    rpc Ack(CompleteRequest) returns (GenericResponse) {}
+    // Complete takes a Xid and step, marking the step as complete (to be enqueued into the next pipe, if needed)
+    rpc Complete(CompleteRequest) returns (GenericResponse) {}
+    // AppendLog takes a routelog and adds it to the message. If step is not given, assumes current step
+    rpc AppendLog(RouteLogRequest) returns (GenericResponse) {}
+    // AddSteps adds steps to the route. If After is not given, assumes after current step
+    rpc AddSteps(AddStepsRequest) returns (GenericResponse) {}
+    // Decorate takes a set of decorations and applies them to the message
+    rpc Decorate(Decorations) returns (GenericResponses) {}
+}
+
+service Store {
+    rpc Get(Xid) returns (messages.Event) {}
+    rpc Del(Xid) returns (GenericResponse) {}
+}

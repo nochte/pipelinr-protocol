@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package accounts;
+option go_package = "github.com/nochte/pipelinr/protobuf/accounts";
+import "pmongo/objectid.proto";
+import "gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+import "pipe.proto";
+
+enum UserActivationState {
+    Inactive = 0;
+    Active = 1;
+    Banned = 2;
+}
+
+message User {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+
+    pmongo.ObjectId id = 1 [(gogoproto.moretags) = "bson:\"_id,omitempty\"" ];
+    string Email = 2;
+    string HashedPassword = 3;
+    string Name = 4;
+    google.protobuf.Timestamp CreatedAt = 5;
+    google.protobuf.Timestamp UpdatedAt = 6;
+    UserActivationState ActivationState = 7;
+}
+
+message Users {
+    repeated User Users = 1;
+}
+
+message APIKey {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+
+    pmongo.ObjectId id = 1 [(gogoproto.moretags) = "bson:\"_id,omitempty\"" ];
+    string UserId = 2;
+    string Key = 3;
+    google.protobuf.Timestamp CreatedAt = 4;
+    google.protobuf.Timestamp UpdatedAt = 5;
+    UserActivationState ActivationState = 6;
+}
+
+message UsernameLoginRequest {
+    string Username = 1;
+    string Password = 2;
+}
+
+message SignupRequest {
+    string Email = 1;
+    string Name = 2;
+}
+
+message JWTValidationRequest {
+    string JWT = 1;
+}
+
+message LoginResponse {
+    string Username = 1;
+    string Name = 2;
+    string JWT = 3;
+    string Id = 4;
+}
+
+message ConfirmSignupRequest {
+    string Token = 1;
+    string Username = 2;
+    string Password = 3;
+}
+
+message CreateAPIKeyRequest {
+    string UserId = 1;
+}
+
+message CreateAPIKeyResponse {
+    string APIKey = 1;
+    string Message = 2;
+}
+
+message ValidateAPIKeyRequestResponse {
+    string APIKey = 1;
+    string UserId = 2;
+}
+
+service Accounts {
+    // These are unauthenticated, wide-open
+    rpc Signup(SignupRequest) returns (pipes.GenericResponse) {}
+    rpc ConfirmSignup(ConfirmSignupRequest) returns (LoginResponse) {}
+    rpc Login(UsernameLoginRequest) returns (LoginResponse) {}
+    rpc ValidateJWT(JWTValidationRequest) returns (LoginResponse) {}
+
+    rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse) {}
+
+    rpc ValidateAPIKey(ValidateAPIKeyRequestResponse) returns (ValidateAPIKeyRequestResponse) {}
+}

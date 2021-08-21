@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package messages;
+import "gogo.proto";
+
+option go_package = "github.com/nochte/pipelinr/protobuf/messages";
+
+message RouteLog {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+
+    string Step = 1;
+    int32 Code = 2;
+    string Message = 3;
+    double Time = 4;
+}
+
+message Decoration {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+
+    string Key = 1;
+    string Value = 2;
+}
+
+message MessageEnvelop {
+    option (gogoproto.goproto_unrecognized) = false;
+    option (gogoproto.goproto_unkeyed) = false;
+    option (gogoproto.goproto_sizecache) = false;
+    
+    string Payload = 1;
+    string MessageType = 2;
+    repeated string Route = 3;
+    repeated string CompletedSteps = 4;
+    repeated RouteLog RouteLog = 5;
+    string DecoratedPayload = 6 [(gogoproto.moretags) = "json:\"_,omitempty\" bson:\"_,omitempty\"" ];
+    repeated Decoration Decorations = 7;
+}
