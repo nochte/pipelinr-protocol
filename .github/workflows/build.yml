@@ -1,6 +1,6 @@
 name: Increment version
 on: push
-  # branches: [ master ]
+  # branches: [ main ]
 
 
 jobs:
