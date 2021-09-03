@@ -8,7 +8,7 @@ import (
 	_ "github.com/amsokol/mongo-go-driver-protobuf/pmongo"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/golang/protobuf/proto"
-	_ "github.com/golang/protobuf/ptypes/timestamp"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
