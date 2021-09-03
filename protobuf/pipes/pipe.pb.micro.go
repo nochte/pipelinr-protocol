@@ -43,6 +43,7 @@ func NewPipeEndpoints() []*api.Endpoint {
 // Client API for Pipe service
 
 type PipeService interface {
+	StreamSend(ctx context.Context, opts ...client.CallOption) (Pipe_StreamSendService, error)
 	// Send will send up a message envelop, and will return an event id, error if invalid for any reason
 	Send(ctx context.Context, in *messages.MessageEnvelop, opts ...client.CallOption) (*Xid, error)
 	// Recv will request to receive with options. Defaults to {
@@ -52,6 +53,7 @@ type PipeService interface {
 	//     Timeout = inf
 	// }
 	Recv(ctx context.Context, in *ReceiveOptions, opts ...client.CallOption) (*messages.Events, error)
+	StreamRecv(ctx context.Context, in *ReceiveOptions, opts ...client.CallOption) (Pipe_StreamRecvService, error)
 	// Ack acknowledges that a message by id was received and can be discarded from the re-enqueue queue queue
 	Ack(ctx context.Context, in *CompleteRequest, opts ...client.CallOption) (*GenericResponse, error)
 	// Complete takes a Xid and step, marking the step as complete (to be enqueued into the next pipe, if needed)
@@ -76,6 +78,57 @@ func NewPipeService(name string, c client.Client) PipeService {
 	}
 }
 
+func (c *pipeService) StreamSend(ctx context.Context, opts ...client.CallOption) (Pipe_StreamSendService, error) {
+	req := c.c.NewRequest(c.name, "Pipe.StreamSend", &messages.MessageEnvelop{})
+	stream, err := c.c.Stream(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &pipeServiceStreamSend{stream}, nil
+}
+
+type Pipe_StreamSendService interface {
+	Context() context.Context
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Send(*messages.MessageEnvelop) error
+	Recv() (*Xid, error)
+}
+
+type pipeServiceStreamSend struct {
+	stream client.Stream
+}
+
+func (x *pipeServiceStreamSend) Close() error {
+	return x.stream.Close()
+}
+
+func (x *pipeServiceStreamSend) Context() context.Context {
+	return x.stream.Context()
+}
+
+func (x *pipeServiceStreamSend) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeServiceStreamSend) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *pipeServiceStreamSend) Send(m *messages.MessageEnvelop) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeServiceStreamSend) Recv() (*Xid, error) {
+	m := new(Xid)
+	err := x.stream.Recv(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *pipeService) Send(ctx context.Context, in *messages.MessageEnvelop, opts ...client.CallOption) (*Xid, error) {
 	req := c.c.NewRequest(c.name, "Pipe.Send", in)
 	out := new(Xid)
@@ -94,6 +147,55 @@ func (c *pipeService) Recv(ctx context.Context, in *ReceiveOptions, opts ...clie
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *pipeService) StreamRecv(ctx context.Context, in *ReceiveOptions, opts ...client.CallOption) (Pipe_StreamRecvService, error) {
+	req := c.c.NewRequest(c.name, "Pipe.StreamRecv", &ReceiveOptions{})
+	stream, err := c.c.Stream(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+	if err := stream.Send(in); err != nil {
+		return nil, err
+	}
+	return &pipeServiceStreamRecv{stream}, nil
+}
+
+type Pipe_StreamRecvService interface {
+	Context() context.Context
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Recv() (*messages.Event, error)
+}
+
+type pipeServiceStreamRecv struct {
+	stream client.Stream
+}
+
+func (x *pipeServiceStreamRecv) Close() error {
+	return x.stream.Close()
+}
+
+func (x *pipeServiceStreamRecv) Context() context.Context {
+	return x.stream.Context()
+}
+
+func (x *pipeServiceStreamRecv) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeServiceStreamRecv) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *pipeServiceStreamRecv) Recv() (*messages.Event, error) {
+	m := new(messages.Event)
+	err := x.stream.Recv(m)
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *pipeService) Ack(ctx context.Context, in *CompleteRequest, opts ...client.CallOption) (*GenericResponse, error) {
@@ -149,6 +251,7 @@ func (c *pipeService) Decorate(ctx context.Context, in *Decorations, opts ...cli
 // Server API for Pipe service
 
 type PipeHandler interface {
+	StreamSend(context.Context, Pipe_StreamSendStream) error
 	// Send will send up a message envelop, and will return an event id, error if invalid for any reason
 	Send(context.Context, *messages.MessageEnvelop, *Xid) error
 	// Recv will request to receive with options. Defaults to {
@@ -158,6 +261,7 @@ type PipeHandler interface {
 	//     Timeout = inf
 	// }
 	Recv(context.Context, *ReceiveOptions, *messages.Events) error
+	StreamRecv(context.Context, *ReceiveOptions, Pipe_StreamRecvStream) error
 	// Ack acknowledges that a message by id was received and can be discarded from the re-enqueue queue queue
 	Ack(context.Context, *CompleteRequest, *GenericResponse) error
 	// Complete takes a Xid and step, marking the step as complete (to be enqueued into the next pipe, if needed)
@@ -172,8 +276,10 @@ type PipeHandler interface {
 
 func RegisterPipeHandler(s server.Server, hdlr PipeHandler, opts ...server.HandlerOption) error {
 	type pipe interface {
+		StreamSend(ctx context.Context, stream server.Stream) error
 		Send(ctx context.Context, in *messages.MessageEnvelop, out *Xid) error
 		Recv(ctx context.Context, in *ReceiveOptions, out *messages.Events) error
+		StreamRecv(ctx context.Context, stream server.Stream) error
 		Ack(ctx context.Context, in *CompleteRequest, out *GenericResponse) error
 		Complete(ctx context.Context, in *CompleteRequest, out *GenericResponse) error
 		AppendLog(ctx context.Context, in *RouteLogRequest, out *GenericResponse) error
@@ -191,12 +297,97 @@ type pipeHandler struct {
 	PipeHandler
 }
 
+func (h *pipeHandler) StreamSend(ctx context.Context, stream server.Stream) error {
+	return h.PipeHandler.StreamSend(ctx, &pipeStreamSendStream{stream})
+}
+
+type Pipe_StreamSendStream interface {
+	Context() context.Context
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Send(*Xid) error
+	Recv() (*messages.MessageEnvelop, error)
+}
+
+type pipeStreamSendStream struct {
+	stream server.Stream
+}
+
+func (x *pipeStreamSendStream) Close() error {
+	return x.stream.Close()
+}
+
+func (x *pipeStreamSendStream) Context() context.Context {
+	return x.stream.Context()
+}
+
+func (x *pipeStreamSendStream) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeStreamSendStream) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *pipeStreamSendStream) Send(m *Xid) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeStreamSendStream) Recv() (*messages.MessageEnvelop, error) {
+	m := new(messages.MessageEnvelop)
+	if err := x.stream.Recv(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (h *pipeHandler) Send(ctx context.Context, in *messages.MessageEnvelop, out *Xid) error {
 	return h.PipeHandler.Send(ctx, in, out)
 }
 
 func (h *pipeHandler) Recv(ctx context.Context, in *ReceiveOptions, out *messages.Events) error {
 	return h.PipeHandler.Recv(ctx, in, out)
+}
+
+func (h *pipeHandler) StreamRecv(ctx context.Context, stream server.Stream) error {
+	m := new(ReceiveOptions)
+	if err := stream.Recv(m); err != nil {
+		return err
+	}
+	return h.PipeHandler.StreamRecv(ctx, m, &pipeStreamRecvStream{stream})
+}
+
+type Pipe_StreamRecvStream interface {
+	Context() context.Context
+	SendMsg(interface{}) error
+	RecvMsg(interface{}) error
+	Close() error
+	Send(*messages.Event) error
+}
+
+type pipeStreamRecvStream struct {
+	stream server.Stream
+}
+
+func (x *pipeStreamRecvStream) Close() error {
+	return x.stream.Close()
+}
+
+func (x *pipeStreamRecvStream) Context() context.Context {
+	return x.stream.Context()
+}
+
+func (x *pipeStreamRecvStream) SendMsg(m interface{}) error {
+	return x.stream.Send(m)
+}
+
+func (x *pipeStreamRecvStream) RecvMsg(m interface{}) error {
+	return x.stream.Recv(m)
+}
+
+func (x *pipeStreamRecvStream) Send(m *messages.Event) error {
+	return x.stream.Send(m)
 }
 
 func (h *pipeHandler) Ack(ctx context.Context, in *CompleteRequest, out *GenericResponse) error {

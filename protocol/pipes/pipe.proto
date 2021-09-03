@@ -64,6 +64,7 @@ message Decorations {
 }
 
 service Pipe {
+    rpc StreamSend(stream messages.MessageEnvelop) returns (stream Xid) {}
     // Send will send up a message envelop, and will return an event id, error if invalid for any reason
     rpc Send(messages.MessageEnvelop) returns (Xid) {}
     // Recv will request to receive with options. Defaults to {
@@ -73,6 +74,7 @@ service Pipe {
     //     Timeout = inf
     // }
     rpc Recv(ReceiveOptions) returns (messages.Events) {}
+    rpc StreamRecv(ReceiveOptions) returns (stream messages.Event) {}
     // Ack acknowledges that a message by id was received and can be discarded from the re-enqueue queue queue
     rpc Ack(CompleteRequest) returns (GenericResponse) {}
     // Complete takes a Xid and step, marking the step as complete (to be enqueued into the next pipe, if needed)
