@@ -91,7 +91,7 @@ func (c *accountsClient) ValidateAPIKey(ctx context.Context, in *ValidateAPIKeyR
 }
 
 // AccountsServer is the server API for Accounts service.
-// All implementations must embed UnimplementedAccountsServer
+// All implementations should embed UnimplementedAccountsServer
 // for forward compatibility
 type AccountsServer interface {
 	// These are unauthenticated, wide-open
@@ -101,10 +101,9 @@ type AccountsServer interface {
 	ValidateJWT(context.Context, *JWTValidationRequest) (*LoginResponse, error)
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error)
 	ValidateAPIKey(context.Context, *ValidateAPIKeyRequestResponse) (*ValidateAPIKeyRequestResponse, error)
-	mustEmbedUnimplementedAccountsServer()
 }
 
-// UnimplementedAccountsServer must be embedded to have forward compatible implementations.
+// UnimplementedAccountsServer should be embedded to have forward compatible implementations.
 type UnimplementedAccountsServer struct {
 }
 
@@ -126,7 +125,6 @@ func (UnimplementedAccountsServer) CreateAPIKey(context.Context, *CreateAPIKeyRe
 func (UnimplementedAccountsServer) ValidateAPIKey(context.Context, *ValidateAPIKeyRequestResponse) (*ValidateAPIKeyRequestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateAPIKey not implemented")
 }
-func (UnimplementedAccountsServer) mustEmbedUnimplementedAccountsServer() {}
 
 // UnsafeAccountsServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to AccountsServer will

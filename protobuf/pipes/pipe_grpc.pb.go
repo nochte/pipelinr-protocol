@@ -177,7 +177,7 @@ func (c *pipeClient) Decorate(ctx context.Context, in *Decorations, opts ...grpc
 }
 
 // PipeServer is the server API for Pipe service.
-// All implementations must embed UnimplementedPipeServer
+// All implementations should embed UnimplementedPipeServer
 // for forward compatibility
 type PipeServer interface {
 	StreamSend(Pipe_StreamSendServer) error
@@ -201,10 +201,9 @@ type PipeServer interface {
 	AddSteps(context.Context, *AddStepsRequest) (*GenericResponse, error)
 	// Decorate takes a set of decorations and applies them to the message
 	Decorate(context.Context, *Decorations) (*GenericResponses, error)
-	mustEmbedUnimplementedPipeServer()
 }
 
-// UnimplementedPipeServer must be embedded to have forward compatible implementations.
+// UnimplementedPipeServer should be embedded to have forward compatible implementations.
 type UnimplementedPipeServer struct {
 }
 
@@ -235,7 +234,6 @@ func (UnimplementedPipeServer) AddSteps(context.Context, *AddStepsRequest) (*Gen
 func (UnimplementedPipeServer) Decorate(context.Context, *Decorations) (*GenericResponses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Decorate not implemented")
 }
-func (UnimplementedPipeServer) mustEmbedUnimplementedPipeServer() {}
 
 // UnsafePipeServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to PipeServer will
@@ -508,15 +506,14 @@ func (c *storeClient) Del(ctx context.Context, in *Xid, opts ...grpc.CallOption)
 }
 
 // StoreServer is the server API for Store service.
-// All implementations must embed UnimplementedStoreServer
+// All implementations should embed UnimplementedStoreServer
 // for forward compatibility
 type StoreServer interface {
 	Get(context.Context, *Xid) (*messages.Event, error)
 	Del(context.Context, *Xid) (*GenericResponse, error)
-	mustEmbedUnimplementedStoreServer()
 }
 
-// UnimplementedStoreServer must be embedded to have forward compatible implementations.
+// UnimplementedStoreServer should be embedded to have forward compatible implementations.
 type UnimplementedStoreServer struct {
 }
 
@@ -526,7 +523,6 @@ func (UnimplementedStoreServer) Get(context.Context, *Xid) (*messages.Event, err
 func (UnimplementedStoreServer) Del(context.Context, *Xid) (*GenericResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Del not implemented")
 }
-func (UnimplementedStoreServer) mustEmbedUnimplementedStoreServer() {}
 
 // UnsafeStoreServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to StoreServer will

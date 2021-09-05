@@ -50,15 +50,14 @@ func (c *healthcheckClient) IsHealthy(ctx context.Context, in *pipes.Null, opts 
 }
 
 // HealthcheckServer is the server API for Healthcheck service.
-// All implementations must embed UnimplementedHealthcheckServer
+// All implementations should embed UnimplementedHealthcheckServer
 // for forward compatibility
 type HealthcheckServer interface {
 	IsReady(context.Context, *pipes.Null) (*pipes.GenericResponse, error)
 	IsHealthy(context.Context, *pipes.Null) (*pipes.GenericResponse, error)
-	mustEmbedUnimplementedHealthcheckServer()
 }
 
-// UnimplementedHealthcheckServer must be embedded to have forward compatible implementations.
+// UnimplementedHealthcheckServer should be embedded to have forward compatible implementations.
 type UnimplementedHealthcheckServer struct {
 }
 
@@ -68,7 +67,6 @@ func (UnimplementedHealthcheckServer) IsReady(context.Context, *pipes.Null) (*pi
 func (UnimplementedHealthcheckServer) IsHealthy(context.Context, *pipes.Null) (*pipes.GenericResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsHealthy not implemented")
 }
-func (UnimplementedHealthcheckServer) mustEmbedUnimplementedHealthcheckServer() {}
 
 // UnsafeHealthcheckServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to HealthcheckServer will
