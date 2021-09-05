@@ -16,6 +16,7 @@ require (
 	github.com/wolfeidau/unflatten v1.1.0
 	go.mongodb.org/mongo-driver v1.7.2 // indirect
 	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/grpc v1.26.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0 // indirect
 	google.golang.org/protobuf v1.27.1
 )

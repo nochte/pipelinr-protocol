@@ -14,8 +14,7 @@ protoc \
         protocol/messages/event.proto \
         --micro_out=./protobuf \
         --gogo_out=M:./protobuf \
-        --go-grpc_out=./protobuf \
-        --go-grpc_out=./protobuf \
+        --go-grpc_out=require_unimplemented_servers=false,./protobuf \
         --validate_out="lang=go:./protobuf"
 
 
@@ -32,7 +31,7 @@ protoc \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/protoc-gen-gotagger/proto \
         protocol/pipes/pipe.proto \
         --micro_out=./protobuf \
-        --go-grpc_out=./protobuf \
+        --go-grpc_out=require_unimplemented_servers=false,./protobuf \
         --gogo_out=M:./protobuf \
         --validate_out="lang=go:./protobuf"
 
@@ -49,7 +48,7 @@ protoc \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/protoc-gen-gotagger/proto \
         protocol/healthcheck/healthcheck.proto \
         --micro_out=./protobuf \
-        --go-grpc_out=./protobuf \
+        --go-grpc_out=require_unimplemented_servers=false,./protobuf \
         --gogo_out=M:./protobuf \
         --validate_out="lang=go:./protobuf"
 
@@ -66,7 +65,7 @@ protoc \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/protoc-gen-gotagger/proto \
         protocol/accounts/user.proto \
         --micro_out=./protobuf \
-        --go-grpc_out=./protobuf \
+        --go-grpc_out=require_unimplemented_servers=false,./protobuf \
         --gogo_out=M:./protobuf \
         --validate_out="lang=go:./protobuf"
 
