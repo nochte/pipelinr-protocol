@@ -92,7 +92,7 @@ service Accounts {
     rpc ConfirmSignup(ConfirmSignupRequest) returns (LoginResponse) {}
 
     rpc Login(UsernameLoginRequest) returns (LoginResponse) {}
-    rpc ForgotPassword(UsernameLoginRequest) returns (LoginResponse) {}
+    rpc ForgotPassword(UsernameLoginRequest) returns (pipes.GenericResponse) {}
     rpc ConfirmForgotPassword(ConfirmSignupRequest) returns (LoginResponse) {}
 
     rpc ValidateJWT(JWTValidationRequest) returns (LoginResponse) {}

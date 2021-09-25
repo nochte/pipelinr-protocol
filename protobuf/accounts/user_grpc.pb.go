@@ -23,7 +23,7 @@ type AccountsClient interface {
 	Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*pipes.GenericResponse, error)
 	ConfirmSignup(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Login(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
-	ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*pipes.GenericResponse, error)
 	ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidateJWT(ctx context.Context, in *JWTValidationRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, opts ...grpc.CallOption) (*CreateAPIKeyResponse, error)
@@ -65,8 +65,8 @@ func (c *accountsClient) Login(ctx context.Context, in *UsernameLoginRequest, op
 	return out, nil
 }
 
-func (c *accountsClient) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
+func (c *accountsClient) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*pipes.GenericResponse, error) {
+	out := new(pipes.GenericResponse)
 	err := c.cc.Invoke(ctx, "/accounts.Accounts/ForgotPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -118,7 +118,7 @@ type AccountsServer interface {
 	Signup(context.Context, *SignupRequest) (*pipes.GenericResponse, error)
 	ConfirmSignup(context.Context, *ConfirmSignupRequest) (*LoginResponse, error)
 	Login(context.Context, *UsernameLoginRequest) (*LoginResponse, error)
-	ForgotPassword(context.Context, *UsernameLoginRequest) (*LoginResponse, error)
+	ForgotPassword(context.Context, *UsernameLoginRequest) (*pipes.GenericResponse, error)
 	ConfirmForgotPassword(context.Context, *ConfirmSignupRequest) (*LoginResponse, error)
 	ValidateJWT(context.Context, *JWTValidationRequest) (*LoginResponse, error)
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error)
@@ -138,7 +138,7 @@ func (UnimplementedAccountsServer) ConfirmSignup(context.Context, *ConfirmSignup
 func (UnimplementedAccountsServer) Login(context.Context, *UsernameLoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedAccountsServer) ForgotPassword(context.Context, *UsernameLoginRequest) (*LoginResponse, error) {
+func (UnimplementedAccountsServer) ForgotPassword(context.Context, *UsernameLoginRequest) (*pipes.GenericResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ForgotPassword not implemented")
 }
 func (UnimplementedAccountsServer) ConfirmForgotPassword(context.Context, *ConfirmSignupRequest) (*LoginResponse, error) {

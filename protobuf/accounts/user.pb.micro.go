@@ -50,7 +50,7 @@ type AccountsService interface {
 	Signup(ctx context.Context, in *SignupRequest, opts ...client.CallOption) (*pipes.GenericResponse, error)
 	ConfirmSignup(ctx context.Context, in *ConfirmSignupRequest, opts ...client.CallOption) (*LoginResponse, error)
 	Login(ctx context.Context, in *UsernameLoginRequest, opts ...client.CallOption) (*LoginResponse, error)
-	ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...client.CallOption) (*LoginResponse, error)
+	ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...client.CallOption) (*pipes.GenericResponse, error)
 	ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, opts ...client.CallOption) (*LoginResponse, error)
 	ValidateJWT(ctx context.Context, in *JWTValidationRequest, opts ...client.CallOption) (*LoginResponse, error)
 	CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, opts ...client.CallOption) (*CreateAPIKeyResponse, error)
@@ -99,9 +99,9 @@ func (c *accountsService) Login(ctx context.Context, in *UsernameLoginRequest, o
 	return out, nil
 }
 
-func (c *accountsService) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...client.CallOption) (*LoginResponse, error) {
+func (c *accountsService) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...client.CallOption) (*pipes.GenericResponse, error) {
 	req := c.c.NewRequest(c.name, "Accounts.ForgotPassword", in)
-	out := new(LoginResponse)
+	out := new(pipes.GenericResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -156,7 +156,7 @@ type AccountsHandler interface {
 	Signup(context.Context, *SignupRequest, *pipes.GenericResponse) error
 	ConfirmSignup(context.Context, *ConfirmSignupRequest, *LoginResponse) error
 	Login(context.Context, *UsernameLoginRequest, *LoginResponse) error
-	ForgotPassword(context.Context, *UsernameLoginRequest, *LoginResponse) error
+	ForgotPassword(context.Context, *UsernameLoginRequest, *pipes.GenericResponse) error
 	ConfirmForgotPassword(context.Context, *ConfirmSignupRequest, *LoginResponse) error
 	ValidateJWT(context.Context, *JWTValidationRequest, *LoginResponse) error
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest, *CreateAPIKeyResponse) error
@@ -168,7 +168,7 @@ func RegisterAccountsHandler(s server.Server, hdlr AccountsHandler, opts ...serv
 		Signup(ctx context.Context, in *SignupRequest, out *pipes.GenericResponse) error
 		ConfirmSignup(ctx context.Context, in *ConfirmSignupRequest, out *LoginResponse) error
 		Login(ctx context.Context, in *UsernameLoginRequest, out *LoginResponse) error
-		ForgotPassword(ctx context.Context, in *UsernameLoginRequest, out *LoginResponse) error
+		ForgotPassword(ctx context.Context, in *UsernameLoginRequest, out *pipes.GenericResponse) error
 		ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, out *LoginResponse) error
 		ValidateJWT(ctx context.Context, in *JWTValidationRequest, out *LoginResponse) error
 		CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, out *CreateAPIKeyResponse) error
@@ -197,7 +197,7 @@ func (h *accountsHandler) Login(ctx context.Context, in *UsernameLoginRequest, o
 	return h.AccountsHandler.Login(ctx, in, out)
 }
 
-func (h *accountsHandler) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, out *LoginResponse) error {
+func (h *accountsHandler) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, out *pipes.GenericResponse) error {
 	return h.AccountsHandler.ForgotPassword(ctx, in, out)
 }
 
