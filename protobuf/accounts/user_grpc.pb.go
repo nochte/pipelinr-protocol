@@ -23,6 +23,8 @@ type AccountsClient interface {
 	Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*pipes.GenericResponse, error)
 	ConfirmSignup(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Login(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidateJWT(ctx context.Context, in *JWTValidationRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, opts ...grpc.CallOption) (*CreateAPIKeyResponse, error)
 	ValidateAPIKey(ctx context.Context, in *ValidateAPIKeyRequestResponse, opts ...grpc.CallOption) (*ValidateAPIKeyRequestResponse, error)
@@ -57,6 +59,24 @@ func (c *accountsClient) ConfirmSignup(ctx context.Context, in *ConfirmSignupReq
 func (c *accountsClient) Login(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
 	err := c.cc.Invoke(ctx, "/accounts.Accounts/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountsClient) ForgotPassword(ctx context.Context, in *UsernameLoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, "/accounts.Accounts/ForgotPassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountsClient) ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, "/accounts.Accounts/ConfirmForgotPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +118,8 @@ type AccountsServer interface {
 	Signup(context.Context, *SignupRequest) (*pipes.GenericResponse, error)
 	ConfirmSignup(context.Context, *ConfirmSignupRequest) (*LoginResponse, error)
 	Login(context.Context, *UsernameLoginRequest) (*LoginResponse, error)
+	ForgotPassword(context.Context, *UsernameLoginRequest) (*LoginResponse, error)
+	ConfirmForgotPassword(context.Context, *ConfirmSignupRequest) (*LoginResponse, error)
 	ValidateJWT(context.Context, *JWTValidationRequest) (*LoginResponse, error)
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error)
 	ValidateAPIKey(context.Context, *ValidateAPIKeyRequestResponse) (*ValidateAPIKeyRequestResponse, error)
@@ -115,6 +137,12 @@ func (UnimplementedAccountsServer) ConfirmSignup(context.Context, *ConfirmSignup
 }
 func (UnimplementedAccountsServer) Login(context.Context, *UsernameLoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedAccountsServer) ForgotPassword(context.Context, *UsernameLoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForgotPassword not implemented")
+}
+func (UnimplementedAccountsServer) ConfirmForgotPassword(context.Context, *ConfirmSignupRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ConfirmForgotPassword not implemented")
 }
 func (UnimplementedAccountsServer) ValidateJWT(context.Context, *JWTValidationRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateJWT not implemented")
@@ -191,6 +219,42 @@ func _Accounts_Login_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Accounts_ForgotPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UsernameLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountsServer).ForgotPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Accounts/ForgotPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountsServer).ForgotPassword(ctx, req.(*UsernameLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Accounts_ConfirmForgotPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmSignupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountsServer).ConfirmForgotPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Accounts/ConfirmForgotPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountsServer).ConfirmForgotPassword(ctx, req.(*ConfirmSignupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Accounts_ValidateJWT_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(JWTValidationRequest)
 	if err := dec(in); err != nil {
@@ -263,6 +327,14 @@ var Accounts_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Login",
 			Handler:    _Accounts_Login_Handler,
+		},
+		{
+			MethodName: "ForgotPassword",
+			Handler:    _Accounts_ForgotPassword_Handler,
+		},
+		{
+			MethodName: "ConfirmForgotPassword",
+			Handler:    _Accounts_ConfirmForgotPassword_Handler,
 		},
 		{
 			MethodName: "ValidateJWT",

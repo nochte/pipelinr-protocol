@@ -90,7 +90,11 @@ service Accounts {
     // These are unauthenticated, wide-open
     rpc Signup(SignupRequest) returns (pipes.GenericResponse) {}
     rpc ConfirmSignup(ConfirmSignupRequest) returns (LoginResponse) {}
+
     rpc Login(UsernameLoginRequest) returns (LoginResponse) {}
+    rpc ForgotPassword(UsernameLoginRequest) returns (LoginResponse) {}
+    rpc ConfirmForgotPassword(ConfirmSignupRequest) returns (LoginResponse) {}
+
     rpc ValidateJWT(JWTValidationRequest) returns (LoginResponse) {}
 
     rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse) {}
