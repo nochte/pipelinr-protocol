@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package accounts;
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/accounts";
+import "pmongo/objectid.proto";
+import "gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "user.proto";
+
+message APIKey {
+  option (gogoproto.goproto_unrecognized) = false;
+  option (gogoproto.goproto_unkeyed) = false;
+  option (gogoproto.goproto_sizecache) = false;
+
+  pmongo.ObjectId id = 1 [(gogoproto.moretags) = "bson:\"_id,omitempty\"" ];
+  string UserId = 2;
+  string Key = 3;
+  google.protobuf.Timestamp CreatedAt = 4;
+  google.protobuf.Timestamp UpdatedAt = 5;
+  UserActivationState ActivationState = 6;
+  string Label = 7;
+  google.protobuf.Timestamp LastUsed = 8;
+}
+
+message CreateAPIKeyRequest {
+  string UserId = 1;
+  string Label = 2;
+}
+
+message CreateAPIKeyResponse {
+  string APIKey = 1;
+  string Message = 2;
+}
+
+message ListAPIKeyResponse {
+  repeated APIKey ApiKeys = 1;
+}

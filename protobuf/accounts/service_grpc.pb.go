@@ -27,6 +27,9 @@ type AccountsClient interface {
 	ConfirmForgotPassword(ctx context.Context, in *ConfirmSignupRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidateJWT(ctx context.Context, in *JWTValidationRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, opts ...grpc.CallOption) (*CreateAPIKeyResponse, error)
+	// NOTE: ListAPIKeys will not return the actual Key value
+	ListAPIKeys(ctx context.Context, in *pipes.Null, opts ...grpc.CallOption) (*ListAPIKeyResponse, error)
+	DeleteAPIKey(ctx context.Context, in *pipes.Xid, opts ...grpc.CallOption) (*pipes.GenericResponse, error)
 	ValidateAPIKey(ctx context.Context, in *ValidateAPIKeyRequestResponse, opts ...grpc.CallOption) (*ValidateAPIKeyRequestResponse, error)
 }
 
@@ -101,6 +104,24 @@ func (c *accountsClient) CreateAPIKey(ctx context.Context, in *CreateAPIKeyReque
 	return out, nil
 }
 
+func (c *accountsClient) ListAPIKeys(ctx context.Context, in *pipes.Null, opts ...grpc.CallOption) (*ListAPIKeyResponse, error) {
+	out := new(ListAPIKeyResponse)
+	err := c.cc.Invoke(ctx, "/accounts.Accounts/ListAPIKeys", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountsClient) DeleteAPIKey(ctx context.Context, in *pipes.Xid, opts ...grpc.CallOption) (*pipes.GenericResponse, error) {
+	out := new(pipes.GenericResponse)
+	err := c.cc.Invoke(ctx, "/accounts.Accounts/DeleteAPIKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *accountsClient) ValidateAPIKey(ctx context.Context, in *ValidateAPIKeyRequestResponse, opts ...grpc.CallOption) (*ValidateAPIKeyRequestResponse, error) {
 	out := new(ValidateAPIKeyRequestResponse)
 	err := c.cc.Invoke(ctx, "/accounts.Accounts/ValidateAPIKey", in, out, opts...)
@@ -122,6 +143,9 @@ type AccountsServer interface {
 	ConfirmForgotPassword(context.Context, *ConfirmSignupRequest) (*LoginResponse, error)
 	ValidateJWT(context.Context, *JWTValidationRequest) (*LoginResponse, error)
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error)
+	// NOTE: ListAPIKeys will not return the actual Key value
+	ListAPIKeys(context.Context, *pipes.Null) (*ListAPIKeyResponse, error)
+	DeleteAPIKey(context.Context, *pipes.Xid) (*pipes.GenericResponse, error)
 	ValidateAPIKey(context.Context, *ValidateAPIKeyRequestResponse) (*ValidateAPIKeyRequestResponse, error)
 }
 
@@ -149,6 +173,12 @@ func (UnimplementedAccountsServer) ValidateJWT(context.Context, *JWTValidationRe
 }
 func (UnimplementedAccountsServer) CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAPIKey not implemented")
+}
+func (UnimplementedAccountsServer) ListAPIKeys(context.Context, *pipes.Null) (*ListAPIKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAPIKeys not implemented")
+}
+func (UnimplementedAccountsServer) DeleteAPIKey(context.Context, *pipes.Xid) (*pipes.GenericResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAPIKey not implemented")
 }
 func (UnimplementedAccountsServer) ValidateAPIKey(context.Context, *ValidateAPIKeyRequestResponse) (*ValidateAPIKeyRequestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateAPIKey not implemented")
@@ -291,6 +321,42 @@ func _Accounts_CreateAPIKey_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Accounts_ListAPIKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(pipes.Null)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountsServer).ListAPIKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Accounts/ListAPIKeys",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountsServer).ListAPIKeys(ctx, req.(*pipes.Null))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Accounts_DeleteAPIKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(pipes.Xid)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountsServer).DeleteAPIKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/accounts.Accounts/DeleteAPIKey",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountsServer).DeleteAPIKey(ctx, req.(*pipes.Xid))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Accounts_ValidateAPIKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ValidateAPIKeyRequestResponse)
 	if err := dec(in); err != nil {
@@ -345,10 +411,18 @@ var Accounts_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Accounts_CreateAPIKey_Handler,
 		},
 		{
+			MethodName: "ListAPIKeys",
+			Handler:    _Accounts_ListAPIKeys_Handler,
+		},
+		{
+			MethodName: "DeleteAPIKey",
+			Handler:    _Accounts_DeleteAPIKey_Handler,
+		},
+		{
 			MethodName: "ValidateAPIKey",
 			Handler:    _Accounts_ValidateAPIKey_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "user.proto",
+	Metadata: "service.proto",
 }

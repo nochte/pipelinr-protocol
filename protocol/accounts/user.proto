@@ -6,8 +6,6 @@ import "pmongo/objectid.proto";
 import "gogo.proto";
 import "google/protobuf/timestamp.proto";
 
-import "pipe.proto";
-
 enum UserActivationState {
     Inactive = 0;
     Active = 1;
@@ -30,19 +28,6 @@ message User {
 
 message Users {
     repeated User Users = 1;
-}
-
-message APIKey {
-    option (gogoproto.goproto_unrecognized) = false;
-    option (gogoproto.goproto_unkeyed) = false;
-    option (gogoproto.goproto_sizecache) = false;
-
-    pmongo.ObjectId id = 1 [(gogoproto.moretags) = "bson:\"_id,omitempty\"" ];
-    string UserId = 2;
-    string Key = 3;
-    google.protobuf.Timestamp CreatedAt = 4;
-    google.protobuf.Timestamp UpdatedAt = 5;
-    UserActivationState ActivationState = 6;
 }
 
 message UsernameLoginRequest {
@@ -72,32 +57,8 @@ message ConfirmSignupRequest {
     string Password = 3;
 }
 
-message CreateAPIKeyRequest {
-    string UserId = 1;
-}
-
-message CreateAPIKeyResponse {
-    string APIKey = 1;
-    string Message = 2;
-}
 
 message ValidateAPIKeyRequestResponse {
     string APIKey = 1;
     string UserId = 2;
-}
-
-service Accounts {
-    // These are unauthenticated, wide-open
-    rpc Signup(SignupRequest) returns (pipes.GenericResponse) {}
-    rpc ConfirmSignup(ConfirmSignupRequest) returns (LoginResponse) {}
-
-    rpc Login(UsernameLoginRequest) returns (LoginResponse) {}
-    rpc ForgotPassword(UsernameLoginRequest) returns (pipes.GenericResponse) {}
-    rpc ConfirmForgotPassword(ConfirmSignupRequest) returns (LoginResponse) {}
-
-    rpc ValidateJWT(JWTValidationRequest) returns (LoginResponse) {}
-
-    rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse) {}
-
-    rpc ValidateAPIKey(ValidateAPIKeyRequestResponse) returns (ValidateAPIKeyRequestResponse) {}
 }

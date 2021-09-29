@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package accounts;
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/accounts";
+
+import "pipe.proto";
+import "apikey.proto";
+import "user.proto";
+
+service Accounts {
+    // These are unauthenticated, wide-open
+    rpc Signup(SignupRequest) returns (pipes.GenericResponse) {}
+    rpc ConfirmSignup(ConfirmSignupRequest) returns (LoginResponse) {}
+
+    rpc Login(UsernameLoginRequest) returns (LoginResponse) {}
+    rpc ForgotPassword(UsernameLoginRequest) returns (pipes.GenericResponse) {}
+    rpc ConfirmForgotPassword(ConfirmSignupRequest) returns (LoginResponse) {}
+
+    rpc ValidateJWT(JWTValidationRequest) returns (LoginResponse) {}
+
+    rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse) {}
+    // NOTE: ListAPIKeys will not return the actual Key value
+    rpc ListAPIKeys(pipes.Null) returns (ListAPIKeyResponse) {}
+    rpc DeleteAPIKey(pipes.Xid) returns (pipes.GenericResponse) {}
+
+    rpc ValidateAPIKey(ValidateAPIKeyRequestResponse) returns (ValidateAPIKeyRequestResponse) {}
+}
