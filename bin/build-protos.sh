@@ -6,6 +6,7 @@ protoc \
         -I protocol/messages \
         -I protocol/pipes \
         -I protocol/healthcheck \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
@@ -26,6 +27,7 @@ protoc \
         -I protocol/messages \
         -I protocol/pipes \
         -I protocol/healthcheck \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
@@ -44,6 +46,7 @@ protoc \
         -I protocol/messages \
         -I protocol/pipes \
         -I protocol/healthcheck \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
@@ -62,6 +65,7 @@ protoc \
         -I protocol/pipes \
         -I protocol/healthcheck \
         -I protocol/accounts \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
@@ -80,6 +84,7 @@ protoc \
         -I protocol/pipes \
         -I protocol/healthcheck \
         -I protocol/accounts \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
@@ -98,11 +103,31 @@ protoc \
         -I protocol/pipes \
         -I protocol/healthcheck \
         -I protocol/accounts \
+        -I protocol/accounting \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
         -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/protoc-gen-gotagger/proto \
         protocol/accounts/service.proto \
+        --micro_out=./protobuf \
+        --go-grpc_opt=require_unimplemented_servers=false \
+        --go-grpc_out=./protobuf \
+        --gogo_out=M:./protobuf \
+        --validate_out="lang=go:./protobuf"
+
+protoc \
+        -I /usr/local/include \
+        -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/gogo/protobuf/gogoproto/ \
+        -I protocol/messages \
+        -I protocol/pipes \
+        -I protocol/healthcheck \
+        -I protocol/accounts \
+        -I protocol/accounting \
+        -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
+        -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/envoyproxy/protoc-gen-validate \
+        -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
+        -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/protoc-gen-gotagger/proto \
+        protocol/accounting/accountingservice.proto \
         --micro_out=./protobuf \
         --go-grpc_opt=require_unimplemented_servers=false \
         --go-grpc_out=./protobuf \

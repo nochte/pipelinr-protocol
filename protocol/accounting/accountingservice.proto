@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package accounting;
+option go_package = "github.com/nochte/pipelinr-protocol/protobuf/accounting";
+import "google/protobuf/timestamp.proto";
+
+message GetReportRequest {
+  // If empty, will return all of them
+  string UserId = 1;
+  google.protobuf.Timestamp StartTime = 2;
+  google.protobuf.Timestamp EndTime = 3;
+}
+
+message GetUserResponseElement {
+  string Type = 1;
+  int64 Count = 2;
+  google.protobuf.Timestamp Timestamp = 3;
+  string UserId = 4;
+}
+
+message GetReportResponse {
+  repeated GetUserResponseElement Report = 1;
+}
+
+service Accounting {
+  rpc GetReport(GetReportRequest) returns (GetReportResponse) {}
+}
