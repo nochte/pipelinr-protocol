@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	messages "github.com/nochte/pipelinr-protocol/protobuf/messages"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	math "math"
 )
 
@@ -421,6 +422,7 @@ func NewStoreEndpoints() []*api.Endpoint {
 type StoreService interface {
 	Get(ctx context.Context, in *Xid, opts ...client.CallOption) (*messages.Event, error)
 	Del(ctx context.Context, in *Xid, opts ...client.CallOption) (*GenericResponse, error)
+	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*messages.Events, error)
 }
 
 type storeService struct {
@@ -455,17 +457,29 @@ func (c *storeService) Del(ctx context.Context, in *Xid, opts ...client.CallOpti
 	return out, nil
 }
 
+func (c *storeService) List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*messages.Events, error) {
+	req := c.c.NewRequest(c.name, "Store.List", in)
+	out := new(messages.Events)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Store service
 
 type StoreHandler interface {
 	Get(context.Context, *Xid, *messages.Event) error
 	Del(context.Context, *Xid, *GenericResponse) error
+	List(context.Context, *ListRequest, *messages.Events) error
 }
 
 func RegisterStoreHandler(s server.Server, hdlr StoreHandler, opts ...server.HandlerOption) error {
 	type store interface {
 		Get(ctx context.Context, in *Xid, out *messages.Event) error
 		Del(ctx context.Context, in *Xid, out *GenericResponse) error
+		List(ctx context.Context, in *ListRequest, out *messages.Events) error
 	}
 	type Store struct {
 		store
@@ -484,4 +498,8 @@ func (h *storeHandler) Get(ctx context.Context, in *Xid, out *messages.Event) er
 
 func (h *storeHandler) Del(ctx context.Context, in *Xid, out *GenericResponse) error {
 	return h.StoreHandler.Del(ctx, in, out)
+}
+
+func (h *storeHandler) List(ctx context.Context, in *ListRequest, out *messages.Events) error {
+	return h.StoreHandler.List(ctx, in, out)
 }

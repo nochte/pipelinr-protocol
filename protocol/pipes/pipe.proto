@@ -6,6 +6,7 @@ option go_package = "github.com/nochte/pipelinr-protocol/protobuf/pipes";
 // import "google/protobuf/struct.proto";
 import "messageenvelop.proto";
 import "event.proto";
+import "google/protobuf/timestamp.proto";
 
 message GenericResponse {
     string Message = 1;
@@ -87,7 +88,17 @@ service Pipe {
     rpc Decorate(Decorations) returns (GenericResponses) {}
 }
 
+message ListRequest {
+    string UserId = 1;
+    google.protobuf.Timestamp StartTime = 2;
+    google.protobuf.Timestamp EndTime = 3;
+    int64 Limit = 4;
+    int64 Offset = 5;
+}
+
 service Store {
     rpc Get(Xid) returns (messages.Event) {}
     rpc Del(Xid) returns (GenericResponse) {}
+
+    rpc List(ListRequest) returns (messages.Events) {}
 }

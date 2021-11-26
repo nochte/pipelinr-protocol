@@ -6,3 +6,5 @@ curl -OL https://github.com/google/protobuf/releases/download/v3.15.8/$PROTOC_ZI
 sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
 sudo unzip -o $PROTOC_ZIP -d /usr/local include/*
 rm -f $PROTOC_ZIP
+sudo chmod 0777  /usr/local/bin/protoc
+sudo chmod 0777 -Rv /usr/local/include/google/

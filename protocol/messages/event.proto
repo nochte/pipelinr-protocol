@@ -33,4 +33,5 @@ message Event {
 
 message Events {
     repeated Event Events = 1;
+    int64 Total = 2;
 }
