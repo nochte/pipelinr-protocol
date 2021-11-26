@@ -1,6 +1,6 @@
 
 
-GO111MODULE=off go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 GO111MODULE=off go get -v github.com/gogo/protobuf/protoc-gen-gogo
 GO111MODULE=off go get -v github.com/envoyproxy/protoc-gen-validate
 GO111MODULE=off go get -v github.com/amsokol/mongo-go-driver-protobuf

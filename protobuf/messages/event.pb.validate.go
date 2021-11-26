@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,6 +32,7 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on Event with the rules defined in the
@@ -306,6 +308,8 @@ func (m *Events) validate(all bool) error {
 		}
 
 	}
+
+	// no validation rules for Total
 
 	if len(errors) > 0 {
 		return EventsMultiError(errors)

@@ -477,6 +477,7 @@ var Pipe_ServiceDesc = grpc.ServiceDesc{
 type StoreClient interface {
 	Get(ctx context.Context, in *Xid, opts ...grpc.CallOption) (*messages.Event, error)
 	Del(ctx context.Context, in *Xid, opts ...grpc.CallOption) (*GenericResponse, error)
+	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*messages.Events, error)
 }
 
 type storeClient struct {
@@ -505,12 +506,22 @@ func (c *storeClient) Del(ctx context.Context, in *Xid, opts ...grpc.CallOption)
 	return out, nil
 }
 
+func (c *storeClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*messages.Events, error) {
+	out := new(messages.Events)
+	err := c.cc.Invoke(ctx, "/pipes.Store/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StoreServer is the server API for Store service.
 // All implementations should embed UnimplementedStoreServer
 // for forward compatibility
 type StoreServer interface {
 	Get(context.Context, *Xid) (*messages.Event, error)
 	Del(context.Context, *Xid) (*GenericResponse, error)
+	List(context.Context, *ListRequest) (*messages.Events, error)
 }
 
 // UnimplementedStoreServer should be embedded to have forward compatible implementations.
@@ -522,6 +533,9 @@ func (UnimplementedStoreServer) Get(context.Context, *Xid) (*messages.Event, err
 }
 func (UnimplementedStoreServer) Del(context.Context, *Xid) (*GenericResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Del not implemented")
+}
+func (UnimplementedStoreServer) List(context.Context, *ListRequest) (*messages.Events, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 
 // UnsafeStoreServer may be embedded to opt out of forward compatibility for this service.
@@ -571,6 +585,24 @@ func _Store_Del_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Store_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StoreServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pipes.Store/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StoreServer).List(ctx, req.(*ListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Store_ServiceDesc is the grpc.ServiceDesc for Store service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -585,6 +617,10 @@ var Store_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Del",
 			Handler:    _Store_Del_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _Store_List_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
