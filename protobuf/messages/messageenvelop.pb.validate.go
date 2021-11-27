@@ -267,8 +267,6 @@ func (m *MessageEnvelop) validate(all bool) error {
 
 	// no validation rules for Payload
 
-	// no validation rules for MessageType
-
 	for idx, item := range m.GetRouteLog() {
 		_, _ = idx, item
 

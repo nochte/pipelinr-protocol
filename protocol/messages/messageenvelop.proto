@@ -31,7 +31,6 @@ message MessageEnvelop {
     option (gogoproto.goproto_sizecache) = false;
     
     string Payload = 1;
-    string MessageType = 2;
     repeated string Route = 3;
     repeated string CompletedSteps = 4;
     repeated RouteLog RouteLog = 5;
