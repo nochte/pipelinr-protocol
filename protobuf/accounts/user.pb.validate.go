@@ -151,6 +151,8 @@ func (m *User) validate(all bool) error {
 
 	// no validation rules for ActivationState
 
+	// no validation rules for TTLDays
+
 	if len(errors) > 0 {
 		return UserMultiError(errors)
 	}
