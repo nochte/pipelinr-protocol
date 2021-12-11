@@ -137,6 +137,7 @@ protoc \
 mv protobuf/github.com/nochte/pipelinr-protocol/protobuf/* protobuf/
 rm -rf protobuf/github.com
 
+cp -rv extensions/* protobuf
 
 # below this for mac / gvm
         # -I ${HOME}/.gvm/pkgsets/go1.13/global/src/github.com/amsokol/mongo-go-driver-protobuf/proto \
