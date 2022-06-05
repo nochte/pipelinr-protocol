@@ -10,6 +10,7 @@ enum UserActivationState {
     Inactive = 0;
     Active = 1;
     Banned = 2;
+    Uberstate = 3;
 }
 
 message User {

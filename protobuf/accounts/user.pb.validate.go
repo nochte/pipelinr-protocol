@@ -156,6 +156,7 @@ func (m *User) validate(all bool) error {
 	if len(errors) > 0 {
 		return UserMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -287,6 +288,7 @@ func (m *Users) validate(all bool) error {
 	if len(errors) > 0 {
 		return UsersMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -389,6 +391,7 @@ func (m *UsernameLoginRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return UsernameLoginRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -494,6 +497,7 @@ func (m *SignupRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return SignupRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -595,6 +599,7 @@ func (m *JWTValidationRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return JWTValidationRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -704,6 +709,7 @@ func (m *LoginResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return LoginResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -809,6 +815,7 @@ func (m *ConfirmSignupRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ConfirmSignupRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -914,6 +921,7 @@ func (m *ValidateAPIKeyRequestResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return ValidateAPIKeyRequestResponseMultiError(errors)
 	}
+
 	return nil
 }
 

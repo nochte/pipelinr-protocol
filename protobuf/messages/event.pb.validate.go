@@ -210,6 +210,7 @@ func (m *Event) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -343,6 +344,7 @@ func (m *Events) validate(all bool) error {
 	if len(errors) > 0 {
 		return EventsMultiError(errors)
 	}
+
 	return nil
 }
 

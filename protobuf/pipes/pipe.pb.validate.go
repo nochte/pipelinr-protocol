@@ -66,6 +66,7 @@ func (m *GenericResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GenericResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -199,6 +200,7 @@ func (m *GenericResponses) validate(all bool) error {
 	if len(errors) > 0 {
 		return GenericResponsesMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -297,6 +299,7 @@ func (m *Null) validate(all bool) error {
 	if len(errors) > 0 {
 		return NullMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -407,6 +410,7 @@ func (m *ReceiveOptions) validate(all bool) error {
 	if len(errors) > 0 {
 		return ReceiveOptionsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -507,6 +511,7 @@ func (m *Xid) validate(all bool) error {
 	if len(errors) > 0 {
 		return XidMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -609,6 +614,7 @@ func (m *CompleteRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CompleteRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -739,6 +745,7 @@ func (m *RouteLogRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return RouteLogRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -842,6 +849,7 @@ func (m *AddStepsRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return AddStepsRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -947,6 +955,7 @@ func (m *Decoration) validate(all bool) error {
 	if len(errors) > 0 {
 		return DecorationMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1081,6 +1090,7 @@ func (m *Decorations) validate(all bool) error {
 	if len(errors) > 0 {
 		return DecorationsMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -1243,6 +1253,7 @@ func (m *ListRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListRequestMultiError(errors)
 	}
+
 	return nil
 }
 

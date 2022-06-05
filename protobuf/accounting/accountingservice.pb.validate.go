@@ -120,6 +120,7 @@ func (m *GetReportRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetReportRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -254,6 +255,7 @@ func (m *GetUserResponseElement) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetUserResponseElementMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -389,6 +391,7 @@ func (m *GetReportResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return GetReportResponseMultiError(errors)
 	}
+
 	return nil
 }
 

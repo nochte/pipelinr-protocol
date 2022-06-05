@@ -183,6 +183,7 @@ func (m *APIKey) validate(all bool) error {
 	if len(errors) > 0 {
 		return APIKeyMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -285,6 +286,7 @@ func (m *CreateAPIKeyRequest) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateAPIKeyRequestMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -390,6 +392,7 @@ func (m *CreateAPIKeyResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return CreateAPIKeyResponseMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -525,6 +528,7 @@ func (m *ListAPIKeyResponse) validate(all bool) error {
 	if len(errors) > 0 {
 		return ListAPIKeyResponseMultiError(errors)
 	}
+
 	return nil
 }
 

@@ -68,6 +68,7 @@ func (m *RouteLog) validate(all bool) error {
 	if len(errors) > 0 {
 		return RouteLogMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -170,6 +171,7 @@ func (m *Decoration) validate(all bool) error {
 	if len(errors) > 0 {
 		return DecorationMultiError(errors)
 	}
+
 	return nil
 }
 
@@ -340,6 +342,7 @@ func (m *MessageEnvelop) validate(all bool) error {
 	if len(errors) > 0 {
 		return MessageEnvelopMultiError(errors)
 	}
+
 	return nil
 }
 
