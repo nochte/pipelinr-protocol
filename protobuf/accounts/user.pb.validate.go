@@ -918,6 +918,8 @@ func (m *ValidateAPIKeyRequestResponse) validate(all bool) error {
 
 	// no validation rules for UserId
 
+	// no validation rules for ActivationState
+
 	if len(errors) > 0 {
 		return ValidateAPIKeyRequestResponseMultiError(errors)
 	}

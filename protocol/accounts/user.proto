@@ -63,4 +63,5 @@ message ConfirmSignupRequest {
 message ValidateAPIKeyRequestResponse {
     string APIKey = 1;
     string UserId = 2;
+    UserActivationState ActivationState = 3;   
 }
