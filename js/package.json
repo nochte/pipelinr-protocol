@@ -1,0 +1,27 @@
+{
+  "name": "@pipelinr/protocol",
+  "version": "1.0.0",
+  "description": "Protobuffer definitions for pipelinr.dev",
+  "main": "index.js",
+  "scripts": {
+    "release:major": "npm version major && git push && git push --tags",
+    "release:minor": "npm version minor && git push && git push --tags",
+    "release:patch": "npm version patch && git push && git push --tags",
+    "release:pre": "npm version prerelease && git push && git push --tags",
+    "release:publish": "npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/nochte/pipelinr-protocol"
+  },
+  "keywords": [
+    "pipelinr"
+  ],
+  "author": "Nate Rowland <rowland.nate@hey.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "1.1.0",
+    "@grpc/proto-loader": "0.5.0",
+    "google-protobuf": "^3.20.1"
+  }
+}
