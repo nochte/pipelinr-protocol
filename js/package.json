@@ -1,6 +1,6 @@
 {
   "name": "@pipelinr/protocol",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Protobuffer definitions for pipelinr.dev",
   "main": "index.js",
   "scripts": {
@@ -20,8 +20,8 @@
   "author": "Nate Rowland <rowland.nate@hey.com>",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "1.1.0",
-    "@grpc/proto-loader": "0.5.0",
-    "google-protobuf": "^3.20.1"
+    "@grpc/grpc-js": "1.1.8",
+    "@grpc/proto-loader": "0.5.5",
+    "google-protobuf": "3.13.0"
   }
 }
