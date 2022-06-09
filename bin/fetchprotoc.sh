@@ -8,3 +8,6 @@ sudo unzip -o $PROTOC_ZIP -d /usr/local include/*
 rm -f $PROTOC_ZIP
 sudo chmod 0777  /usr/local/bin/protoc
 sudo chmod 0777 -Rv /usr/local/include/google/
+
+npm config set unsafe-perm true
+npm install -g grpc-tools
