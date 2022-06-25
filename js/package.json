@@ -1,6 +1,6 @@
 {
   "name": "@pipelinr/protocol",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Protobuffer definitions for pipelinr.dev",
   "main": "index.js",
   "scripts": {
