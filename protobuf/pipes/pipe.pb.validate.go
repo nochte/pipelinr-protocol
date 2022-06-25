@@ -407,6 +407,12 @@ func (m *ReceiveOptions) validate(all bool) error {
 
 	// no validation rules for RedeliveryTimeout
 
+	// no validation rules for ExcludeRouting
+
+	// no validation rules for ExcludeRouteLog
+
+	// no validation rules for ExcludeDecoratedPayload
+
 	if len(errors) > 0 {
 		return ReceiveOptionsMultiError(errors)
 	}

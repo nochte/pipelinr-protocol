@@ -773,7 +773,10 @@ proto.pipes.ReceiveOptions.toObject = function(includeInstance, msg) {
     count: jspb.Message.getFieldWithDefault(msg, 3, 0),
     timeout: jspb.Message.getFieldWithDefault(msg, 4, 0),
     pipe: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    redeliverytimeout: jspb.Message.getFieldWithDefault(msg, 6, 0)
+    redeliverytimeout: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    excluderouting: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+    excluderoutelog: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+    excludedecoratedpayload: jspb.Message.getBooleanFieldWithDefault(msg, 9, false)
   };
 
   if (includeInstance) {
@@ -833,6 +836,18 @@ proto.pipes.ReceiveOptions.deserializeBinaryFromReader = function(msg, reader) {
     case 6:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setRedeliverytimeout(value);
+      break;
+    case 7:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setExcluderouting(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setExcluderoutelog(value);
+      break;
+    case 9:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setExcludedecoratedpayload(value);
       break;
     default:
       reader.skipField();
@@ -902,6 +917,27 @@ proto.pipes.ReceiveOptions.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeInt64(
       6,
+      f
+    );
+  }
+  f = message.getExcluderouting();
+  if (f) {
+    writer.writeBool(
+      7,
+      f
+    );
+  }
+  f = message.getExcluderoutelog();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = message.getExcludedecoratedpayload();
+  if (f) {
+    writer.writeBool(
+      9,
       f
     );
   }
@@ -1013,6 +1049,60 @@ proto.pipes.ReceiveOptions.prototype.getRedeliverytimeout = function() {
  */
 proto.pipes.ReceiveOptions.prototype.setRedeliverytimeout = function(value) {
   return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional bool ExcludeRouting = 7;
+ * @return {boolean}
+ */
+proto.pipes.ReceiveOptions.prototype.getExcluderouting = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pipes.ReceiveOptions} returns this
+ */
+proto.pipes.ReceiveOptions.prototype.setExcluderouting = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 7, value);
+};
+
+
+/**
+ * optional bool ExcludeRouteLog = 8;
+ * @return {boolean}
+ */
+proto.pipes.ReceiveOptions.prototype.getExcluderoutelog = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pipes.ReceiveOptions} returns this
+ */
+proto.pipes.ReceiveOptions.prototype.setExcluderoutelog = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional bool ExcludeDecoratedPayload = 9;
+ * @return {boolean}
+ */
+proto.pipes.ReceiveOptions.prototype.getExcludedecoratedpayload = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.pipes.ReceiveOptions} returns this
+ */
+proto.pipes.ReceiveOptions.prototype.setExcludedecoratedpayload = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 9, value);
 };
 
 

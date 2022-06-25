@@ -26,7 +26,11 @@ message ReceiveOptions {
     int64 Timeout = 4;
     string Pipe = 5;
     int64 RedeliveryTimeout = 6;
+    bool ExcludeRouting = 7;
+    bool ExcludeRouteLog = 8;
+    bool ExcludeDecoratedPayload = 9;
 }
+
 message Xid {
     string _id = 1;
 }
