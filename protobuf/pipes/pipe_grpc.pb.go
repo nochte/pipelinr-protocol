@@ -41,7 +41,7 @@ type PipeClient interface {
 	// Decorate takes a set of decorations and applies them to the message
 	Decorate(ctx context.Context, in *Decorations, opts ...grpc.CallOption) (*GenericResponses, error)
 	// GetDecoration, given a message id and decoration keys, yields the values of those field
-	GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error)
+	GetDecorations(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error)
 }
 
 type pipeClient struct {
@@ -178,9 +178,9 @@ func (c *pipeClient) Decorate(ctx context.Context, in *Decorations, opts ...grpc
 	return out, nil
 }
 
-func (c *pipeClient) GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error) {
+func (c *pipeClient) GetDecorations(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error) {
 	out := new(Decorations)
-	err := c.cc.Invoke(ctx, "/pipes.Pipe/GetDecoration", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pipes.Pipe/GetDecorations", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +213,7 @@ type PipeServer interface {
 	// Decorate takes a set of decorations and applies them to the message
 	Decorate(context.Context, *Decorations) (*GenericResponses, error)
 	// GetDecoration, given a message id and decoration keys, yields the values of those field
-	GetDecoration(context.Context, *GetDecorationRequest) (*Decorations, error)
+	GetDecorations(context.Context, *GetDecorationRequest) (*Decorations, error)
 }
 
 // UnimplementedPipeServer should be embedded to have forward compatible implementations.
@@ -247,8 +247,8 @@ func (UnimplementedPipeServer) AddSteps(context.Context, *AddStepsRequest) (*Gen
 func (UnimplementedPipeServer) Decorate(context.Context, *Decorations) (*GenericResponses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Decorate not implemented")
 }
-func (UnimplementedPipeServer) GetDecoration(context.Context, *GetDecorationRequest) (*Decorations, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDecoration not implemented")
+func (UnimplementedPipeServer) GetDecorations(context.Context, *GetDecorationRequest) (*Decorations, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDecorations not implemented")
 }
 
 // UnsafePipeServer may be embedded to opt out of forward compatibility for this service.
@@ -435,20 +435,20 @@ func _Pipe_Decorate_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Pipe_GetDecoration_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Pipe_GetDecorations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetDecorationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PipeServer).GetDecoration(ctx, in)
+		return srv.(PipeServer).GetDecorations(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pipes.Pipe/GetDecoration",
+		FullMethod: "/pipes.Pipe/GetDecorations",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PipeServer).GetDecoration(ctx, req.(*GetDecorationRequest))
+		return srv.(PipeServer).GetDecorations(ctx, req.(*GetDecorationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -489,8 +489,8 @@ var Pipe_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Pipe_Decorate_Handler,
 		},
 		{
-			MethodName: "GetDecoration",
-			Handler:    _Pipe_GetDecoration_Handler,
+			MethodName: "GetDecorations",
+			Handler:    _Pipe_GetDecorations_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

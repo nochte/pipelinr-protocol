@@ -264,8 +264,8 @@ decorate: {
     responseDeserialize: deserialize_pipes_GenericResponses,
   },
   // GetDecoration, given a message id and decoration keys, yields the values of those field
-getDecoration: {
-    path: '/pipes.Pipe/GetDecoration',
+getDecorations: {
+    path: '/pipes.Pipe/GetDecorations',
     requestStream: false,
     responseStream: false,
     requestType: pipe_pb.GetDecorationRequest,
