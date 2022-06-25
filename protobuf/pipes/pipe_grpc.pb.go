@@ -41,7 +41,7 @@ type PipeClient interface {
 	// Decorate takes a set of decorations and applies them to the message
 	Decorate(ctx context.Context, in *Decorations, opts ...grpc.CallOption) (*GenericResponses, error)
 	// GetDecoration, given a message id and decoration keys, yields the values of those field
-	GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decoration, error)
+	GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error)
 }
 
 type pipeClient struct {
@@ -178,8 +178,8 @@ func (c *pipeClient) Decorate(ctx context.Context, in *Decorations, opts ...grpc
 	return out, nil
 }
 
-func (c *pipeClient) GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decoration, error) {
-	out := new(Decoration)
+func (c *pipeClient) GetDecoration(ctx context.Context, in *GetDecorationRequest, opts ...grpc.CallOption) (*Decorations, error) {
+	out := new(Decorations)
 	err := c.cc.Invoke(ctx, "/pipes.Pipe/GetDecoration", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -213,7 +213,7 @@ type PipeServer interface {
 	// Decorate takes a set of decorations and applies them to the message
 	Decorate(context.Context, *Decorations) (*GenericResponses, error)
 	// GetDecoration, given a message id and decoration keys, yields the values of those field
-	GetDecoration(context.Context, *GetDecorationRequest) (*Decoration, error)
+	GetDecoration(context.Context, *GetDecorationRequest) (*Decorations, error)
 }
 
 // UnimplementedPipeServer should be embedded to have forward compatible implementations.
@@ -247,7 +247,7 @@ func (UnimplementedPipeServer) AddSteps(context.Context, *AddStepsRequest) (*Gen
 func (UnimplementedPipeServer) Decorate(context.Context, *Decorations) (*GenericResponses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Decorate not implemented")
 }
-func (UnimplementedPipeServer) GetDecoration(context.Context, *GetDecorationRequest) (*Decoration, error) {
+func (UnimplementedPipeServer) GetDecoration(context.Context, *GetDecorationRequest) (*Decorations, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDecoration not implemented")
 }
 

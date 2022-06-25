@@ -62,17 +62,6 @@ function deserialize_pipes_CompleteRequest(buffer_arg) {
   return pipe_pb.CompleteRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_pipes_Decoration(arg) {
-  if (!(arg instanceof pipe_pb.Decoration)) {
-    throw new Error('Expected argument of type pipes.Decoration');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_pipes_Decoration(buffer_arg) {
-  return pipe_pb.Decoration.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_pipes_Decorations(arg) {
   if (!(arg instanceof pipe_pb.Decorations)) {
     throw new Error('Expected argument of type pipes.Decorations');
@@ -280,11 +269,11 @@ getDecoration: {
     requestStream: false,
     responseStream: false,
     requestType: pipe_pb.GetDecorationRequest,
-    responseType: pipe_pb.Decoration,
+    responseType: pipe_pb.Decorations,
     requestSerialize: serialize_pipes_GetDecorationRequest,
     requestDeserialize: deserialize_pipes_GetDecorationRequest,
-    responseSerialize: serialize_pipes_Decoration,
-    responseDeserialize: deserialize_pipes_Decoration,
+    responseSerialize: serialize_pipes_Decorations,
+    responseDeserialize: deserialize_pipes_Decorations,
   },
 };
 
