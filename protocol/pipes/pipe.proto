@@ -86,6 +86,14 @@ service Pipe {
     rpc AddSteps(AddStepsRequest) returns (GenericResponse) {}
     // Decorate takes a set of decorations and applies them to the message
     rpc Decorate(Decorations) returns (GenericResponses) {}
+
+    // GetDecoration, given a message id and decoration keys, yields the values of those field
+    rpc GetDecoration(GetDecorationRequest) returns (Decoration) {}
+}
+
+message GetDecorationRequest {
+    string _id = 1;
+    repeated string Keys = 2;
 }
 
 message ListRequest {

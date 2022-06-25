@@ -62,6 +62,17 @@ function deserialize_pipes_CompleteRequest(buffer_arg) {
   return pipe_pb.CompleteRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_pipes_Decoration(arg) {
+  if (!(arg instanceof pipe_pb.Decoration)) {
+    throw new Error('Expected argument of type pipes.Decoration');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_pipes_Decoration(buffer_arg) {
+  return pipe_pb.Decoration.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_pipes_Decorations(arg) {
   if (!(arg instanceof pipe_pb.Decorations)) {
     throw new Error('Expected argument of type pipes.Decorations');
@@ -93,6 +104,17 @@ function serialize_pipes_GenericResponses(arg) {
 
 function deserialize_pipes_GenericResponses(buffer_arg) {
   return pipe_pb.GenericResponses.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_pipes_GetDecorationRequest(arg) {
+  if (!(arg instanceof pipe_pb.GetDecorationRequest)) {
+    throw new Error('Expected argument of type pipes.GetDecorationRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_pipes_GetDecorationRequest(buffer_arg) {
+  return pipe_pb.GetDecorationRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_pipes_ListRequest(arg) {
@@ -251,6 +273,18 @@ decorate: {
     requestDeserialize: deserialize_pipes_Decorations,
     responseSerialize: serialize_pipes_GenericResponses,
     responseDeserialize: deserialize_pipes_GenericResponses,
+  },
+  // GetDecoration, given a message id and decoration keys, yields the values of those field
+getDecoration: {
+    path: '/pipes.Pipe/GetDecoration',
+    requestStream: false,
+    responseStream: false,
+    requestType: pipe_pb.GetDecorationRequest,
+    responseType: pipe_pb.Decoration,
+    requestSerialize: serialize_pipes_GetDecorationRequest,
+    requestDeserialize: deserialize_pipes_GetDecorationRequest,
+    responseSerialize: serialize_pipes_Decoration,
+    responseDeserialize: deserialize_pipes_Decoration,
   },
 };
 
